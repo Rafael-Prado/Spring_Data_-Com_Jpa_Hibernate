@@ -30,8 +30,7 @@ public class Documento implements Serializable{
 		super();
 	}
 
-	public Documento(Long id, String cpf, Integer rg) {
-		this.id = id;
+	public Documento(String cpf, Integer rg) {		
 		this.cpf = cpf;
 		this.rg = rg;
 	}

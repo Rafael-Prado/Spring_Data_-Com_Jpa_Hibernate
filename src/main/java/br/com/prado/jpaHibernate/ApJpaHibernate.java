@@ -2,7 +2,9 @@ package br.com.prado.jpaHibernate;
 
 import java.util.List;
 
+import br.com.prado.jpaHibernate.dao.DocumentoDao;
 import br.com.prado.jpaHibernate.dao.PessoaDao;
+import br.com.prado.jpaHibernate.entity.Documento;
 import br.com.prado.jpaHibernate.entity.Pessoa;
 
 public class ApJpaHibernate {
@@ -19,10 +21,46 @@ public class ApJpaHibernate {
 		//updatePessoa();
 		//deletePessoa();
 		
+		
+		//insertDocumento();
+		//updateDocumento();
+		buscaPorCpf();	
+		
 
 	}	
 	
+	private static void buscaPorCpf() {
+		Pessoa p = new PessoaDao().pessoaPorCpf("049.584.199-42");
+		
+		System.out.println(p.toString());
+	}
 
+	private static void updateDocumento() {
+		Documento doc  = new DocumentoDao().findBydId(1L);
+		System.out.println(doc.toString());
+		
+		doc.setRg(321654987);		
+		new DocumentoDao().update(doc);
+		
+		System.out.println(new DocumentoDao().findBydId(1L));
+	}
+
+	private static void insertDocumento() {
+		Pessoa p1 = new Pessoa();
+		p1.setPrimeiroNome("Rafael");
+		p1.setSobreNome("Barbosa");
+		p1.setIdade(23);
+		
+		p1.setDocumento(new Documento("049.584.199-42", 123456789));
+		
+		new PessoaDao().save(p1);
+		
+		System.out.println(p1.toString());
+		
+	}
+
+
+	//*** Pessoa***///
 	private static void deletePessoa() {
 		new PessoaDao().delete(3l);		
 	}

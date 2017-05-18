@@ -27,5 +27,12 @@ public class PessoaDao extends GenericDao<Pessoa>{
 		String jpql = "from Pessoa p where p.sobreNome like ?";
 		return Find(jpql, sobreNome);
 	}
+	
+	public Pessoa pessoaPorCpf(String cpf){
+		String jpql = "select p from Pessoa p, Documento d where d.cpf like ? " +
+						"and p.documento.id = d.id";	
+		
+		return FindOne(jpql, cpf);
+	}
 
 }
