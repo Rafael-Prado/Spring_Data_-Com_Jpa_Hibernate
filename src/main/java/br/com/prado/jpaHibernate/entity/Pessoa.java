@@ -2,12 +2,15 @@ package br.com.prado.jpaHibernate.entity;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Index;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -30,6 +33,11 @@ public class Pessoa implements Serializable {
 	
 	@Column(name="idade", nullable=false)
 	private Integer idade;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name= "documento_Id")
+	private Documento documento;
+	
 
 	public Long getId() {
 		return id;
@@ -61,6 +69,14 @@ public class Pessoa implements Serializable {
 
 	public void setIdade(Integer idade) {
 		this.idade = idade;
+	}	
+
+	public Documento getDocumento() {
+		return documento;
+	}
+
+	public void setDocumento(Documento documento) {
+		this.documento = documento;
 	}
 
 	@Override
@@ -91,8 +107,10 @@ public class Pessoa implements Serializable {
 	@Override
 	public String toString() {
 		return "Pessoa [id=" + id + ", primeiroNome=" + primeiroNome + ", sobreNome=" + sobreNome + ", idade=" + idade
-				+ "]";
+				+ ", documento=" + documento + "]";
 	}
+
+	
 	
 	
 }

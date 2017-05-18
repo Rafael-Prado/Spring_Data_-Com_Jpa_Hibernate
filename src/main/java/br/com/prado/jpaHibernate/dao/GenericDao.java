@@ -24,7 +24,7 @@ public abstract class GenericDao<T extends Serializable>{
 	public Long count(){
 		EntityManager manager = getEntityManager();
 		manager.getTransaction().begin();
-		Query query = manager.createQuery("SELECT COUNT(c) FROM " + aClass.getSimpleName() + "c");
+		Query query = manager.createQuery("SELECT COUNT(c) FROM " + aClass.getSimpleName() + " c");
 		
 		Long entity =  (Long) query.getSingleResult();			
 		manager.getTransaction().commit();
@@ -67,7 +67,7 @@ public abstract class GenericDao<T extends Serializable>{
 	public List<T> findAll(){
 		EntityManager manager = getEntityManager();
 		manager.getTransaction().begin();
-		Query query = manager.createQuery("From" + aClass.getSimpleName());
+		Query query = manager.createQuery("from " + aClass.getSimpleName());
 		List<T> entities = query.getResultList();		
 		manager.getTransaction().commit();
 		manager.close();		
