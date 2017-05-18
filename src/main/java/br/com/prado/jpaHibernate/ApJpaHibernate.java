@@ -1,11 +1,15 @@
 package br.com.prado.jpaHibernate;
 
+
 import java.util.List;
 
 import br.com.prado.jpaHibernate.dao.DocumentoDao;
 import br.com.prado.jpaHibernate.dao.PessoaDao;
+import br.com.prado.jpaHibernate.dao.TelefoneDao;
 import br.com.prado.jpaHibernate.entity.Documento;
 import br.com.prado.jpaHibernate.entity.Pessoa;
+import br.com.prado.jpaHibernate.entity.Telefone;
+import br.com.prado.jpaHibernate.entity.Telefone.TipoTelefone;
 
 public class ApJpaHibernate {
 
@@ -24,11 +28,105 @@ public class ApJpaHibernate {
 		
 		//insertDocumento();
 		//updateDocumento();
-		buscaPorCpf();	
+		//buscaPorCpf();	
+		
+		//insertTelefone();
+		//insertTelefonePorPessoa();
+		//updateTelefone();
+		//updateTelefonePorPessoa();
+		deleteEmCascade();
+		
 		
 
-	}	
+	}
 	
+	
+	private static void deleteEmCascade() {
+		//new PessoaDao().delete(7L);
+		//new TelefoneDao().delete(6L);
+		
+		TelefoneDao tele = new TelefoneDao();
+		Telefone telefone = tele.findBydId(6L);
+		
+		System.out.println(telefone);
+		
+		telefone.getPessoa().delTelefone(telefone);
+		
+		tele.delete(telefone);
+		
+	}
+
+
+	private static void updateTelefonePorPessoa() {
+		Pessoa pessoa = new PessoaDao().findBydId(7L);
+		
+		for(Telefone phone : pessoa.getTelefones()){
+			System.out.println("1- " + phone.toString());
+			
+				if(TipoTelefone.RESIDENCIAL == phone.getTipo()){
+					phone.setTipo(TipoTelefone.COMERCIAL);
+				}
+		}
+		new PessoaDao().update(pessoa);
+		
+	}
+
+
+	private static void updateTelefone() {
+		Pessoa pessoa = new PessoaDao().findBydId(1L);
+		
+		TelefoneDao dao = new TelefoneDao();
+		
+		Telefone t2 = dao.findBydId(6L);
+		t2.setPessoa(pessoa);
+		
+		dao.update(t2);
+		
+	}
+
+
+	private static void insertTelefonePorPessoa() {
+		
+		Telefone t1 = new Telefone(TipoTelefone.CELULAR, "9254686541");
+		Telefone t2 = new Telefone(TipoTelefone.COMERCIAL, "214562453");
+		
+		Pessoa pessoa = new Pessoa();
+		pessoa.setPrimeiroNome("Joaquina");
+		pessoa.setSobreNome("Lilica");
+		pessoa.setIdade(65);
+			
+		pessoa.setDocumento(new Documento("444.444.555-44", 1524455678));
+		
+		pessoa.addTelefone(t1);
+		pessoa.addTelefone(t2);
+		new PessoaDao().save(pessoa);
+	}
+
+
+	private static void insertTelefone() {
+		Pessoa pessoa = new Pessoa();
+		pessoa.setPrimeiroNome("Elena");
+		pessoa.setSobreNome("borges");
+		pessoa.setIdade(45);
+		
+		pessoa.setDocumento(new Documento("444.444.444-44", 1524245678));
+		
+		Telefone telefone = new Telefone(TipoTelefone.CELULAR, "91225808");
+		telefone.setPessoa(pessoa);
+		
+		TelefoneDao dao = new TelefoneDao();
+		
+		dao.save(telefone);
+		dao.findBydId(telefone.getId());
+		
+		
+		System.out.println(telefone.toString());
+		
+	}
+	
+	
+	//**Documento**//
+
 	private static void buscaPorCpf() {
 		Pessoa p = new PessoaDao().pessoaPorCpf("049.584.199-42");
 		

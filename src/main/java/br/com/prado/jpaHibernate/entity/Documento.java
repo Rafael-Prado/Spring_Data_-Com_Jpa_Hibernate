@@ -88,8 +88,6 @@ public class Documento implements Serializable{
 	public String toString() {
 		return "Documento [id=" + id + ", cpf=" + cpf + ", rg=" + rg + "]";
 	}
-	
-	
 
 	
 }

@@ -1,17 +1,22 @@
 package br.com.prado.jpaHibernate.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
 
 @Entity
 @Table(name = "pessoas",
@@ -38,6 +43,25 @@ public class Pessoa implements Serializable {
 	@JoinColumn(name= "documento_Id")
 	private Documento documento;
 	
+	@OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private List<Telefone> telefones;
+	
+	
+	public void addTelefone(Telefone telefone){
+		if(telefones == null){
+			telefones = new ArrayList<Telefone>();
+		}
+		telefone.setPessoa(this);
+		telefones.add(telefone);
+		
+	}
+	
+	public void delTelefone(Telefone telefone){
+		if(telefones != null){
+			telefones.remove(telefone);
+		}
+	}
+
 
 	public Long getId() {
 		return id;
@@ -78,7 +102,15 @@ public class Pessoa implements Serializable {
 	public void setDocumento(Documento documento) {
 		this.documento = documento;
 	}
+	
+	public List<Telefone> getTelefones() {
+		return telefones;
+	}
 
+	public void setTelefones(List<Telefone> telefones) {
+		this.telefones = telefones;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -107,10 +139,11 @@ public class Pessoa implements Serializable {
 	@Override
 	public String toString() {
 		return "Pessoa [id=" + id + ", primeiroNome=" + primeiroNome + ", sobreNome=" + sobreNome + ", idade=" + idade
-				+ ", documento=" + documento + "]";
+				+ ", documento=" + documento + ", telefones=" + telefones + "]";
 	}
 
 	
-	
+
+		
 	
 }
