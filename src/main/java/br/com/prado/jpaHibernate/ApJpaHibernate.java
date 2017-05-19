@@ -1,12 +1,16 @@
 package br.com.prado.jpaHibernate;
 
 
+import java.util.Arrays;
 import java.util.List;
 
 import br.com.prado.jpaHibernate.dao.DocumentoDao;
+import br.com.prado.jpaHibernate.dao.EnderecoDao;
 import br.com.prado.jpaHibernate.dao.PessoaDao;
 import br.com.prado.jpaHibernate.dao.TelefoneDao;
 import br.com.prado.jpaHibernate.entity.Documento;
+import br.com.prado.jpaHibernate.entity.Endereco;
+import br.com.prado.jpaHibernate.entity.Endereco.TipoEndereco;
 import br.com.prado.jpaHibernate.entity.Pessoa;
 import br.com.prado.jpaHibernate.entity.Telefone;
 import br.com.prado.jpaHibernate.entity.Telefone.TipoTelefone;
@@ -34,13 +38,71 @@ public class ApJpaHibernate {
 		//insertTelefonePorPessoa();
 		//updateTelefone();
 		//updateTelefonePorPessoa();
-		deleteEmCascade();
+		//deleteEmCascade();
+		
+		//insertEnderecoPorPessoa();
+		//insertPessoaPorEndereco();
+		enderecoPorCidade();
+		
 		
 		
 
 	}
 	
-	
+	private static void enderecoPorCidade() {
+		List<Endereco> enderecos = new EnderecoDao().buscarPorCidade("Florianopolis");
+		 for(Endereco endereco : enderecos){
+			 System.out.println(endereco.toString());
+		 }
+		
+	}
+
+	private static void insertPessoaPorEndereco() {
+		Pessoa pessoa = new PessoaDao().findBydId(2L);
+Endereco ad1 = new Endereco();
+		
+		ad1.setCidade("Urupema");
+		ad1.setLogradouro("Av. Das flores n20");
+		ad1.setTipoEndereco(TipoEndereco.RESIDENCIAL);
+		ad1.setPessoa(Arrays.asList(pessoa));
+		
+		EnderecoDao dao = new EnderecoDao();
+		dao.save(ad1);
+		System.out.println(dao.findBydId(ad1.getId()));
+	}
+
+	private static void insertEnderecoPorPessoa() {
+		Endereco ad1 = new Endereco();
+		
+		ad1.setCidade("Urupema");
+		ad1.setLogradouro("Av. Mauro n20");
+		ad1.setTipoEndereco(TipoEndereco.RESIDENCIAL);
+		
+		Endereco ad2 = new Endereco();
+		
+		ad2.setCidade("Florianopolis");
+		ad2.setLogradouro("Av. Luz n10");
+		ad2.setTipoEndereco(TipoEndereco.COMERCIAL);
+		
+		Pessoa p1 = new Pessoa();
+		p1.setPrimeiroNome("João Pedro");
+		p1.setSobreNome("Perira");
+		p1.setIdade(25);		
+		p1.setDocumento(new Documento("055.555.666.22", 23654879));		
+		p1.addTelefone(new Telefone(TipoTelefone.RESIDENCIAL, "4524843154"));
+		p1.addTelefone(new Telefone(TipoTelefone.COMERCIAL, "2155454654"));
+		
+		p1.setEnderecos(Arrays.asList(ad1, ad2));
+		
+		new PessoaDao().save(p1);
+		
+		System.out.println(new PessoaDao().findBydId(p1.getId()));
+		
+		
+	}
+
+
+	//**Telfone**//
 	private static void deleteEmCascade() {
 		//new PessoaDao().delete(7L);
 		//new TelefoneDao().delete(6L);

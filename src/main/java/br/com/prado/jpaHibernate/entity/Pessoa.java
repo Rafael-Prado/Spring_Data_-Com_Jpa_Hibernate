@@ -13,6 +13,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -45,6 +47,14 @@ public class Pessoa implements Serializable {
 	
 	@OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<Telefone> telefones;
+	
+	@ManyToMany(cascade = CascadeType.ALL, fetch =FetchType.EAGER)
+	@JoinTable(
+			name= "pessoa_endereco",
+			joinColumns=@JoinColumn(name="pessoa_id"),
+			inverseJoinColumns= @JoinColumn(name= "endereco_id")
+	)
+	private List<Endereco> enderecos;
 	
 	
 	public void addTelefone(Telefone telefone){
@@ -109,8 +119,16 @@ public class Pessoa implements Serializable {
 
 	public void setTelefones(List<Telefone> telefones) {
 		this.telefones = telefones;
-	}
+	}	
 	
+	public List<Endereco> getEnderecos() {
+		return enderecos;
+	}
+
+	public void setEnderecos(List<Endereco> enderecos) {
+		this.enderecos = enderecos;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
